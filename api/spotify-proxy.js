@@ -2,9 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-// Spotify Developer Dashboardで取得した認証情報をここに貼り付けてください
-const CLIENT_ID = '998a088acce545729b0a856e4dc1aaf1';
-const CLIENT_SECRET = '095e32e32f144bf594255bf34c0864bd';
+require('dotenv').config();
+
+// Spotify Developer Dashboardで取得した認証情報を.envから読み込む
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 // テスト用のルートエンドポイント
 app.get('/', (req, res) => {
