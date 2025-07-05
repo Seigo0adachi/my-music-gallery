@@ -1,0 +1,1185 @@
+/* Reset */
+body,
+html,
+.app,
+.card-list {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  background: #fff !important;
+  overflow: visible !important;
+}
+
+.app {
+  text-align: center;
+  font-family: sans-serif;
+  padding: 0;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dark,
+.dark body,
+.dark .app,
+.dark .card-list {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.dark .music-card {
+  background: #333;
+  border-color: #555;
+}
+
+.dark .header {
+  color: #fff !important;
+}
+
+.dark .form input {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.dark .form input::placeholder {
+  color: #aaa !important;
+}
+
+.dark .form button {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+.dark .form button:hover {
+  background-color: #444 !important;
+}
+
+.header {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 10px;
+}
+
+/* Form */
+.form {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-container {
+  position: relative;
+  width: 450px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.form input {
+  padding: 14px 20px 14px 45px;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 9999px;
+  border: none;
+  background-color: #f0f2f5;
+  box-sizing: border-box;
+  margin-right: 0;
+}
+
+.form input::placeholder {
+  color: #888;
+}
+
+.form input:focus {
+  outline: none;
+}
+
+.form button {
+  padding: 14px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+/* Card List */
+.card-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  flex-direction: row !important;
+  gap: 0 !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.card-list.list {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.music-card-container {
+  min-width: 200px !important;
+  max-width: 200px !important;
+  width: 200px !important;
+  height: 200px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  perspective: 1000px;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+.music-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  border: none !important;
+  background: #1a1a1a !important;
+}
+
+.music-card:hover {
+  border: 2px solid #fff !important;
+}
+
+.dark .music-card {
+  background: #333;
+  border-color: #555;
+}
+
+.music-card img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 0;
+  margin-top: 0;
+}
+
+/* Scroll Text */
+.scroll-container {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  height: 1.4em;
+  background: none;
+  pointer-events: auto !important;
+  z-index: 10;
+}
+
+.scroll-text {
+  display: inline-block;
+  width: max-content;
+  white-space: nowrap;
+  transform: translateX(0);
+  will-change: transform;
+  transition: transform 6s linear, padding-left 0.1s;
+  padding-left: 20px;
+  margin: 0;
+}
+
+/* .scroll-container:hover .scroll-text {
+  transition: transform 5s linear;
+  transform: translateX(-60%);
+} */
+
+/* Memo */
+.memo-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-8px) scale(0.95);
+  transition: all 0.4s ease;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+.memo-wrapper.active {
+  max-height: 40px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  z-index: 10;
+  border-radius: 8px;
+  background: #fafafa;
+  padding: 4px 0;
+}
+
+.memo-input {
+  width: 90%;
+  border: none;
+  border-bottom: 1px dashed #aaa;
+  outline: none;
+  font-size: 0.85rem;
+  padding: 4px;
+  background: transparent;
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 5px;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.button-row {
+  position: static;
+  margin: 0 auto;
+  justify-content: center;
+  width: 100%;
+  z-index: 2;
+  padding: 0 24px;
+  box-sizing: border-box;
+  padding-top: 0 !important;
+  margin-top: auto;
+  margin-bottom: 18px;
+  gap: 6px;
+}
+
+.music-card button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 1.2rem;
+  margin-bottom: 7px;
+}
+
+.music-card-container.dragging {
+  z-index: 9999 !important;
+}
+
+.music-card-container.dragging .music-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background-color: #f9f9f9;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-content textarea {
+  width: 90%;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Setting Toggles */
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.setting-row span {
+  flex: 1;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* List Mode Styling */
+.card-list.list .music-card-container {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.card-list.list .music-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.card-list.list .music-card img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0 16px 0 0;
+}
+
+.card-list.list .card-text-area {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: visible;
+}
+
+.card-list.list .scroll-container {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  background: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.card-list.list .scroll-text {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 0;
+  font-size: 1.1em;
+  color: black !important;
+  background: none !important;
+  position: relative;
+  z-index: 1;
+}
+
+.card-list.list .button-row {
+  margin-left: auto !important;
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.card-list.list button {
+  background: none;
+  font-size: 0;
+}
+
+.card-list.list .button-row button::before {
+  content: none !important;
+}
+
+.card-list.list .button-row button:nth-child(1)::before {
+  content: "\25B6"; /* ▶ */
+}
+
+.card-list.list .button-row button:nth-child(2)::before {
+  content: "\274C"; /* ❌ */
+}
+
+.card-list.list .memo-toggle:hover {
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #26c6da !important;
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s,
+    border-radius 0.15s;
+}
+
+/* Dark mode for modal */
+.dark .modal-content {
+  background: #333;
+  color: white;
+}
+
+.dark .modal-content textarea {
+  background-color: #444;
+  color: white;
+  border: 1px solid #666;
+}
+
+.music-list-row {
+  display: flex;
+  align-items: center;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 8px 0 0;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  box-sizing: border-box !important;
+  height: 56px;
+  border-bottom: 1px solid #eee;
+  background: transparent !important;
+}
+
+.music-index {
+  width: 32px;
+  text-align: right;
+  color: #888;
+  font-size: 1em;
+  margin-right: 8px;
+}
+
+.music-drag-handle {
+  width: 18px;
+  margin-right: 8px;
+  color: #aaa;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 12px;
+  margin-left: 0;
+}
+
+.music-title {
+  flex: 2 1 0;
+  min-width: 0;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.05em;
+}
+
+.music-artist {
+  flex: 1 1 0;
+  min-width: 0;
+  color: #888;
+  font-size: 0.97em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 16px;
+}
+
+.music-labels {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 16px;
+  overflow-x: auto;
+}
+
+.music-memo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  width: auto !important;
+  box-sizing: border-box;
+}
+
+.music-memo button {
+  margin: 0;
+  padding: 0 8px;
+  font-size: 1.2rem;
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.music-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.music-list-row .memo-input {
+  width: 180px;
+  font-size: 0.95em;
+  margin-left: 4px;
+  text-align: left;
+}
+
+.music-actions button {
+  font-size: 1.2rem !important;
+  background: none;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* リスト用のボタンにはcontentやfont-size: 0;を適用しない */
+.card-list.list button {
+  font-size: 1.2rem !important;
+}
+
+.card-list.list .button-row button::before {
+  content: none !important;
+}
+
+.music-list-row:hover {
+  background: #282828 !important;
+  color: #fff !important;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ボタンのホバー効果 */
+.music-actions button:hover,
+.music-memo button:hover,
+.button-row button:hover,
+.label-toggle:hover,
+.memo-toggle:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+  z-index: 2;
+}
+
+/* リスト表示時のボタンホバー */
+.card-list.list .music-actions button:hover,
+.card-list.list .music-memo button:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+  z-index: 2;
+}
+
+/* memo-toggleボタンには疑似要素を絶対に表示しない */
+.memo-toggle::before,
+.memo-toggle::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* ラベルボタンの初期状態を整理 */
+.label-toggle {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s,
+    border-radius 0.15s;
+}
+
+/* カード表示時のラベルボタンのホバー */
+.card-list:not(.list) .label-toggle:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  border: none;
+  padding: 5px 10px;
+  min-height: 36px;
+}
+
+/* リスト表示時のラベルボタンのホバー */
+.card-list.list .label-toggle:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  border: none;
+}
+
+/* リスト表示時のボタン共通サイズ・丸角 */
+.card-list.list .music-actions button,
+.card-list.list .music-memo button,
+.card-list.list .label-toggle,
+.card-list.list .memo-toggle {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem !important;
+}
+
+/* ホバー時の白背景も統一 */
+.card-list.list .music-actions button:hover,
+.card-list.list .music-memo button:hover,
+.card-list.list .label-toggle:hover,
+.card-list.list .memo-toggle:hover {
+  background: #fff !important;
+  color: #000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: none !important;
+  border-radius: 8px !important;
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s,
+    border-radius 0.15s;
+}
+
+/* カード表示時のホバーエフェクト */
+.card-list:not(.list) .music-card {
+  transition: transform 0.11s cubic-bezier(0.4, 0.2, 0.2, 1),
+    box-shadow 0.11s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.card-list:not(.list) .music-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+/* カード表示時のタイトル高さを調整し、上下の切れを解消 */
+.card-list:not(.list) .music-card > div:nth-child(2) {
+  min-height: 56px;
+  line-height: 1.5;
+  padding: 8px 4px;
+  text-align: center;
+  overflow: hidden;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-sizing: border-box;
+}
+
+.memo-tooltip {
+  position: absolute;
+  left: 50%;
+  top: -32px;
+  transform: translateX(-50%);
+  background: #eee;
+  color: #222;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.92em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+
+.music-memo .memo-toggle:hover + .memo-tooltip,
+.music-memo .memo-toggle:focus + .memo-tooltip {
+  opacity: 1;
+}
+
+/* ポップアップ閉じるボタン */
+.popup-close-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%; /* 丸形 */
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3001;
+  font-size: 1.4rem; /* アイコンサイズ調整 */
+  color: #444; /* デフォルトの色を濃いグレーに */
+  transition: background 0.15s, color 0.15s;
+}
+
+.dark .popup-close-button {
+  color: #ccc; /* ダークモードでの色を調整 */
+}
+
+.popup-close-button:hover {
+  background: rgba(128, 128, 128, 0.2); /* ホバー時の薄いグレー背景 */
+  color: #000; /* ホバー時の色を黒に */
+}
+
+.dark .popup-close-button:hover {
+  background: rgba(200, 200, 200, 0.2); /* ダークモードでのホバー背景 */
+  color: #fff; /* ダークモードでのホバー色を白に */
+}
+
+.music-card-label-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  margin: 0 !important;
+  padding-bottom: 0 !important;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.music-card-label-scroll span {
+  background: #e0e0e0;
+  border-radius: 0;
+  padding: 0 10px !important;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 32px;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1 !important;
+}
+
+/* ラベル管理UIのラベルも角丸をなくす */
+.music-card-label-scroll span,
+.music-labels span,
+span[style*="background: #e0e0e0"],
+span[style*="background: #f5f5f5"],
+.music-labels > span,
+.music-card-label-scroll > span,
+.music-labels span[style],
+.music-card-label-scroll span[style],
+.music-labels span,
+.music-card-label-scroll span,
+.music-labels > span,
+.music-card-label-scroll > span {
+  border-radius: 0 !important;
+}
+
+/* ラベルの✖︎ボタンを黒に */
+.music-card-label-scroll span span,
+span[style*="background: #e0e0e0"] span,
+span[style*="background: #f5f5f5"] span {
+  color: #222 !important;
+}
+span[style*="background: #e0e0e0"] > span:last-child,
+span[style*="background: #f5f5f5"] > span:last-child {
+  color: #222 !important;
+}
+
+/* emoji-mart カテゴリアンカー中央揃え＆ホバー背景修正 */
+.dark .emoji-mart-anchor {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 48px !important;
+  height: 48px !important;
+}
+
+.dark .emoji-mart-anchor:hover,
+.dark .emoji-mart-anchor-selected {
+  background: #333 !important;
+  border-radius: 12px !important;
+}
+
+/* emoji-mart カテゴリインジケーターのズレ修正 */
+.emoji-mart-category .emoji-mart-anchors {
+  box-sizing: content-box !important;
+}
+
+.emoji-mart-anchor-selected .emoji-mart-anchor-bar {
+  left: 0 !important;
+  right: 5px !important;
+  width: auto !important;
+}
+
+.emoji-mart-search {
+  position: relative;
+}
+
+.emoji-mart-search input {
+  padding-right: 36px !important; /* アイコン分の余白を確保 */
+}
+
+.emoji-mart-search-icon,
+.emoji-mart-search-icon svg {
+  position: absolute !important;
+  top: 50%;
+  right: 12px !important;
+  left: auto !important;
+  transform: translateY(-56%);
+  pointer-events: none; /* クリックをinputに通す */
+}
+
+.music-card-container:hover .title-overlay {
+  opacity: 1;
+}
+
+.title-overlay h3 {
+  color: white;
+  margin: 0;
+  padding: 10px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.dark .music-card-label-scroll span {
+  color: #222 !important;
+}
+
+.dark .music-labels span {
+  color: #222 !important;
+}
+
+.dark .music-labels span span {
+  color: #222 !important;
+  -webkit-text-fill-color: #222 !important;
+}
+
+/* カードホバー時の削除ボタンとタイトル表示 */
+.music-card:hover .card-delete-button {
+  opacity: 1;
+}
+
+.music-card:hover .title-overlay {
+  opacity: 1;
+}
+
+/* カードホバー時のオーバーレイ表示 */
+.music-card:hover .card-overlay {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* オーバーレイ内のボタンホバー効果 */
+.card-overlay button:hover {
+  background: rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.1);
+}
+
+/* デバッグ用：オーバーレイが確実に表示されるように */
+.card-overlay {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Bootstrap Iconsのスタイル調整 */
+.bi {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+/* メモボタンのアイコンサイズ調整 */
+.memo-toggle .bi {
+  font-size: 1.1em;
+}
+
+/* ラベルボタンのアイコンサイズ調整 */
+.label-toggle .bi {
+  font-size: 1.1em;
+}
+
+/* オーバーレイ内のアイコンサイズ調整 */
+.card-overlay .bi {
+  font-size: 1.1em;
+}
+
+/* メモモーダルのスタイル */
+.memo-input::placeholder {
+  color: #888 !important;
+}
+
+/* メモモーダルのボタンホバー効果 */
+.memo-modal button:hover {
+  background: #333 !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+
+/* 絵文字ピッカーのスクロールバーをダークモード対応 */
+.dark .emoji-mart-scroll {
+  background: #111 !important;
+}
+
+.dark .emoji-mart-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark .emoji-mart-scroll::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 4px;
+}
+
+.dark .emoji-mart-scroll::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 4px;
+}
+
+.dark .emoji-mart-scroll::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}
+
+/* 絵文字ピッカーの全体をダークモード対応 */
+.dark .emoji-mart {
+  background: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+.dark .emoji-mart-search input {
+  background: #111 !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+
+.dark .emoji-mart-search input::placeholder {
+  color: #aaa !important;
+}
+
+.dark .emoji-mart-category-label {
+  color: #fff !important;
+}
+
+.dark .emoji-mart-anchor {
+  color: #fff !important;
+}
+
+.dark .emoji-mart-anchor:hover {
+  background: #333 !important;
+}
+
+.dark .emoji-mart-anchor-selected {
+  background: #333 !important;
+}
+
+.delete-all-btn {
+  background: rgb(255, 68, 68) !important;
+  color: white !important;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 12px 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form .delete-all-btn {
+  background: #e0e0e0 !important;
+  color: #333 !important;
+}
+
+.form button.delete-all-btn:hover {
+  background: rgb(255, 68, 68) !important;
+  color: #fff !important;
+}
+
+.custom-tag {
+  position: relative;
+  background: #000;
+  color: #fff;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px 0 14px;
+  height: 28px;
+  margin: 3px 4px 3px 0;
+  border-radius: 7px 0 0 7px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+  font-size: 0.97em;
+  z-index: 1;
+  overflow: visible;
+}
+.custom-tag::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: #fff;
+  border-radius: 9px 0 0 9px;
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 2px 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+.dark .custom-tag::before {
+  background: #fff;
+}
+.custom-tag > * {
+  position: relative;
+  z-index: 1;
+}
+.custom-tag .tag-emoji {
+  margin-left: 0;
+  margin-right: 6px;
+  width: 20px;
+  height: 20px;
+  font-size: 1em;
+  background: #fff;
+  color: #0057ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custom-tag .tag-text {
+  white-space: nowrap;
+  font-size: 1em;
+}
+.custom-tag > span:last-child {
+  margin-left: 10px !important;
+  color: #fff !important;
+  font-weight: normal;
+  cursor: pointer;
+  font-size: 1.1em;
+  background: none;
+}
+.custom-tag > span:last-child:hover {
+  color: #ffb !important;
+}
+
+/* タグ（ラベル）をボタン風に統一 */
+.music-label-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  margin: 0 6px 0 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: none;
+  min-height: 28px;
+}
+
+.music-label-btn .tag-emoji {
+  font-size: 1.1em;
+  margin-right: 4px;
+}
+
+.music-label-btn.selected,
+.music-label-btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+.dark .music-label-btn {
+  background: #333;
+  color: #fff;
+}
+
+.dark .music-label-btn.selected {
+  background: #fff !important;
+  color: #222 !important;
+}
+
+.dark .music-label-btn.selected .tag-emoji {
+  color: #222 !important;
+}
+
+.dark .music-label-btn:hover {
+  background-color: #444;
+  color: #fff;
+}
