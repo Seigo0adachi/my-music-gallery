@@ -154,6 +154,46 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
               objectFit: 'cover'
             }}
           />
+          {/* ホバー時のタグ絵文字（左上） */}
+          {isHovered && cardLabels.length > 0 && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 4,
+                left: 4,
+                zIndex: 20,
+                display: 'flex',
+                gap: '4px',
+                pointerEvents: 'none',
+              }}
+            >
+              {cardLabels.map((lid) => {
+                const label = labels.find(l => l.id === lid);
+                return label ? (
+                  <span
+                    key={lid}
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.2)',
+                      border: '2px solid #fff',
+                      color: '#222',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.2em',
+                      fontWeight: 600,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+                      userSelect: 'none',
+                    }}
+                  >
+                    {label.emoji || '🏷'}
+                  </span>
+                ) : null;
+              })}
+            </div>
+          )}
           {/* ホバー時のオーバーレイ（黒背景＋情報） */}
           {isHovered && (
             <div
@@ -1007,7 +1047,7 @@ function App() {
         modifiers={[restrictToHorizontalAxis]}
       >
         <SortableContext items={labels.map(label => label.id)} strategy={horizontalListSortingStrategy}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, overflowX: 'auto', padding: '0 20px 8px 20px', justifyContent: 'flex-start' }}> {/* タグリストのコンテナ */}
+          <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 18, overflowX: 'auto', padding: '0 20px 8px 20px', justifyContent: 'flex-start' }}> {/* タグリストのコンテナ */}
             {labels.map((label, idx) => (
               <SortableLabel
                 key={label.id}
@@ -1056,7 +1096,7 @@ function App() {
               onMouseLeave={e => {
                 e.target.style.background = darkMode ? '#111' : '#fff';
               }}
-            >＋タグ追加</button>
+            >タグ作成</button>
           </div>
         </SortableContext>
       </DndContext>
@@ -1157,12 +1197,12 @@ function App() {
                     setLabelMenuCardId(null);
                   }}
                   disabled={labels.length >= 5}
-                >＋タグ追加</button>
+                >タグ作成</button>
                 <button style={{ flex: 1, marginTop: 0, marginBottom: 0, padding: "4px 18px", borderRadius: 8, border: "1px solid #fff", background: "#000", cursor: "pointer", color: "#fff" }} onClick={() => setLabelMenuCardId(null)}>閉じる</button>
               </div>
               {labels.length >= 5 && (
                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 12, color: '#ff8888', fontWeight: 500, fontSize: '1em', whiteSpace: 'nowrap', gap: 8 }}>
-                  追加できるタグは5個までです。
+                  作成できるタグは5個までです。
                 </span>
               )}
             </div>
@@ -1335,7 +1375,7 @@ function App() {
       )}
 
       <div style={{ position: "sticky", bottom: 0, zIndex: 1000 }}>
-        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={60} />
       </div>
     </div>
   );
