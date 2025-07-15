@@ -43,7 +43,8 @@ app.get('/api/spotify-artist', async (req, res) => {
       headers: { Authorization: `Bearer ${token}` }
     });
     const artistName = trackRes.data.artists[0].name;
-    res.json({ artist: artistName });
+    const albumName = trackRes.data.album.name;
+    res.json({ artist: artistName, album: albumName });
   } catch (err) {
     console.error('Error details:', err.response?.data || err.message);
     res.status(500).json({ 
