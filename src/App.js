@@ -61,10 +61,10 @@ const i18n_ja = {
   }
 };
 
-function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handlePlay, handleDelete, listView, labels = [], toggleCardLabel, setLabelMenuCardId, setModalMemoCardId, setFilterLabelId, setShowAlbumCardId, showAlbumCardId, darkMode, is1020, is770Strict, is769, is700, setCenterModalCardId }) {
+function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handlePlay, handleDelete, listView, labels = [], toggleCardLabel, setLabelMenuCardId, setModalMemoCardId, setFilterLabelId, setShowAlbumCardId, showAlbumCardId, darkMode, is1020, is770Strict, is769, is700, setCenterModalCardId, checkLoginRequired }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.id });
-  const style = { 
-    transform: CSS.Transform.toString(transform), 
+  const style = {
+    transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 1000 : 'auto',
     opacity: isDragging ? 0.8 : 1,
@@ -113,81 +113,81 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
       {...attributes} {...listeners}
       onClick={handleCardClick}
     >
-        {listView ? (
-          <div className="music-list-row">
-            <div className="music-index">{card.index !== undefined ? card.index + 1 : ''}</div>
-            <div className="music-drag-handle" {...listeners} style={{ cursor: "grab", width: 18, height: 18, marginRight: 8, display: "flex", alignItems: "center", justifyContent: "center", userSelect: "none" }}>≡</div>
-            <img className="music-img" src={card.image} alt={card.title} />
-            <div className="music-title-col">
-              {/* 1020px以下のときは必ず題名の上にアーティスト名（＋700px以下ならアルバム名）を表示 */}
-              {is1020 && (
-                <span className="music-artist-album-row music-artist-album-row-responsive" style={{width: '100%'}}>
-                  <span className="music-artist-small" style={{fontSize: '0.98em', lineHeight: '1.2', verticalAlign: 'baseline', fontWeight: 'normal', fontStyle: 'normal'}}>
-                    {card.artist}{is770Strict && card.album ? '：' : ''}
-                  </span>
-                  {is770Strict && card.album && (
-                    <span className="music-album-inline-top" style={{marginLeft: 0, marginTop: '-5px', fontSize: '0.98em', color: titleColor, fontWeight: 'normal', fontStyle: 'normal', lineHeight: '1.2', verticalAlign: 'baseline', display: 'inline'}}>{card.album.length > 18 ? card.album.slice(0, 18) + '…' : card.album}</span>
-                  )}
+      {listView ? (
+        <div className="music-list-row">
+          <div className="music-index">{card.index !== undefined ? card.index + 1 : ''}</div>
+          <div className="music-drag-handle" {...listeners} style={{ cursor: "grab", width: 18, height: 18, marginRight: 8, display: "flex", alignItems: "center", justifyContent: "center", userSelect: "none" }}>≡</div>
+          <img className="music-img" src={card.image} alt={card.title} />
+          <div className="music-title-col">
+            {/* 1020px以下のときは必ず題名の上にアーティスト名（＋700px以下ならアルバム名）を表示 */}
+            {is1020 && (
+              <span className="music-artist-album-row music-artist-album-row-responsive" style={{ width: '100%' }}>
+                <span className="music-artist-small" style={{ fontSize: '0.98em', lineHeight: '1.2', verticalAlign: 'baseline', fontWeight: 'normal', fontStyle: 'normal' }}>
+                  {card.artist}{is770Strict && card.album ? '：' : ''}
+                </span>
+                {is770Strict && card.album && (
+                  <span className="music-album-inline-top" style={{ marginLeft: 0, marginTop: '-5px', fontSize: '0.98em', color: titleColor, fontWeight: 'normal', fontStyle: 'normal', lineHeight: '1.2', verticalAlign: 'baseline', display: 'inline' }}>{card.album.length > 18 ? card.album.slice(0, 18) + '…' : card.album}</span>
+                )}
+              </span>
+            )}
+            <div
+              className="music-title"
+              ref={titleRef}
+              style={{ cursor: 'default', color: titleColor }}
+              title={card.title && ((is769 ? card.title.length > 23 : card.title.length > 18) ? card.title : '')}
+            >
+              {/* 769px以上は23文字、未満は18文字で省略 */}
+              {card.title
+                ? is769
+                  ? (card.title.length > 23 ? card.title.slice(0, 23) + '…' : card.title)
+                  : (card.title.length > 18 ? card.title.slice(0, 18) + '…' : card.title)
+                : "（タイトルなし）"}
+              {card.labels && card.labels.length > 0 && (
+                <span className="music-title-labels">
+                  {card.labels.map((lid) => {
+                    const label = labels.find(l => l.id === lid);
+                    return label ? (
+                      <span
+                        key={lid}
+                        style={{
+                          fontSize: '1.2em',
+                          marginLeft: '8px',
+                          cursor: 'pointer'
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFilterLabelId(lid);
+                        }}
+                        title={`${label.name}でフィルタ`}
+                      >
+                        {label.emoji || '🏷'}
+                      </span>
+                    ) : null;
+                  })}
                 </span>
               )}
-              <div 
-                className="music-title"
-                ref={titleRef}
-                style={{ cursor: 'default', color: titleColor }}
-                title={card.title && ((is769 ? card.title.length > 23 : card.title.length > 18) ? card.title : '')}
-              >
-                {/* 769px以上は23文字、未満は18文字で省略 */}
-                {card.title
-                  ? is769
-                    ? (card.title.length > 23 ? card.title.slice(0, 23) + '…' : card.title)
-                    : (card.title.length > 18 ? card.title.slice(0, 18) + '…' : card.title)
-                  : "（タイトルなし）"}
-                {card.labels && card.labels.length > 0 && (
-                  <span className="music-title-labels">
-                    {card.labels.map((lid) => {
-                const label = labels.find(l => l.id === lid);
-                return label ? (
-                        <span 
-                          key={lid}
-                          style={{ 
-                            fontSize: '1.2em', 
-                            marginLeft: '8px',
-                            cursor: 'pointer'
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setFilterLabelId(lid);
-                          }}
-                          title={`${label.name}でフィルタ`}
-                        >
-                          {label.emoji || '🏷'}
-                  </span>
-                ) : null;
-              })}
-                  </span>
-                )}
             </div>
-              </div>
-            <div className="music-artist-col">
-              {/* 1020px超のときだけアーティスト名を本来の位置に表示 */}
-              {!is1020 && <div className="music-artist">{card.artist}</div>}
-            </div>
-            <div className="music-album-col"><div className="music-album">{card.album}</div></div>
-            <div className="music-labels">
+          </div>
+          <div className="music-artist-col">
+            {/* 1020px超のときだけアーティスト名を本来の位置に表示 */}
+            {!is1020 && <div className="music-artist">{card.artist}</div>}
+          </div>
+          <div className="music-album-col"><div className="music-album">{card.album}</div></div>
+          <div className="music-labels">
             {card.labels && card.labels.map((lid, idx) => {
-                const label = labels.find(l => l.id === lid);
-                return label ? (
-                <span 
-                  key={lid} 
-                  style={{ 
-                    fontSize: '1.5em', 
-                    background: 'none', 
-                    padding: 0, 
-                    minWidth: 0, 
-                    maxWidth: 'none', 
-                    flexShrink: 0, 
-                    marginLeft: idx === 0 ? '8px' : 0, 
-                    display: 'inline-flex', 
+              const label = labels.find(l => l.id === lid);
+              return label ? (
+                <span
+                  key={lid}
+                  style={{
+                    fontSize: '1.5em',
+                    background: 'none',
+                    padding: 0,
+                    minWidth: 0,
+                    maxWidth: 'none',
+                    flexShrink: 0,
+                    marginLeft: idx === 0 ? '8px' : 0,
+                    display: 'inline-flex',
                     alignItems: 'center',
                     cursor: 'pointer'
                   }}
@@ -199,40 +199,40 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                 >
                   <span>{label.emoji || '🏷'}</span>
                   <span className="label-name-text" style={{ color: darkMode ? '#fff' : '#222', fontSize: '0.7em', marginLeft: 2 }}>{label.name}</span>
-                  </span>
-                ) : null;
-              })}
-            </div>
-            {/* ボタン群を1つのmusic-actions内にまとめる */}
-            <div className="music-actions" style={{ pointerEvents: 'auto' }}>
-              <button onClick={e => { e.stopPropagation(); handlePlay(card); }}>▶</button>
-              <button onClick={e => { e.stopPropagation(); handleDelete(card.id); }}>
-                <i className="fa-sharp-duotone fa-solid fa-xmark"></i>
-              </button>
-              <button className="label-toggle" onClick={e => { e.stopPropagation(); setLabelMenuCardId(card.id); }} style={{ fontSize: 16, padding: "2px 10px", borderRadius: 8, cursor: "pointer", zIndex: 21 }}>
-                <i className="bi bi-flag"></i>
-              </button>
-              <button className="memo-toggle" onClick={e => { e.stopPropagation(); setModalMemoCardId(card.id); }}>
-                <i className="bi bi-chat-dots"></i>
-              </button>
-            </div>
+                </span>
+              ) : null;
+            })}
           </div>
-        ) : (
-        <div 
-          className={`music-card`} 
-          style={{ 
-            position: 'relative', 
+          {/* ボタン群を1つのmusic-actions内にまとめる */}
+          <div className="music-actions" style={{ pointerEvents: 'auto' }}>
+            <button onClick={e => { e.stopPropagation(); handlePlay(card); }}>▶</button>
+            <button onClick={e => { e.stopPropagation(); handleDelete(card.id); }}>
+              <i className="fa-sharp-duotone fa-solid fa-xmark"></i>
+            </button>
+            <button className="label-toggle" onClick={e => { e.stopPropagation(); if (!checkLoginRequired()) return; setLabelMenuCardId(card.id); }} style={{ fontSize: 16, padding: "2px 10px", borderRadius: 8, cursor: "pointer", zIndex: 21 }}>
+              <i className="bi bi-flag"></i>
+            </button>
+            <button className="memo-toggle" onClick={e => { e.stopPropagation(); setModalMemoCardId(card.id); }}>
+              <i className="bi bi-chat-dots"></i>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div
+          className={`music-card`}
+          style={{
+            position: 'relative',
             background: '#fff',
             cursor: 'grab',
             overflow: 'hidden'
-          }} 
+          }}
           onClick={() => { if (showFullText) setShowFullText(false); }}
         >
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  style={{
-                    display: "block",
+          <img
+            src={card.image}
+            alt={card.title}
+            style={{
+              display: "block",
               pointerEvents: 'none',
               draggable: false,
               width: '100%',
@@ -242,8 +242,8 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
           />
           {/* ホバー時のタグ絵文字（左上） */}
           {isHovered && cardLabels.length > 0 && (
-                <div
-                  style={{
+            <div
+              style={{
                 position: 'absolute',
                 top: 4,
                 left: 4,
@@ -258,15 +258,15 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                 return label ? (
                   <span
                     key={lid}
-                style={{
+                    style={{
                       width: '32px',
                       height: '32px',
                       borderRadius: '50%',
                       background: 'rgba(255,255,255,0.2)',
                       border: '2px solid #fff',
                       color: '#222',
-                  display: 'flex',
-                  alignItems: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '1.2em',
                       fontWeight: 600,
@@ -274,11 +274,11 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                       userSelect: 'none',
                     }}
                   >
-                      {label.emoji || '🏷'}
-                    </span>
-                  ) : null;
-                })}
-              </div>
+                    {label.emoji || '🏷'}
+                  </span>
+                ) : null;
+              })}
+            </div>
           )}
           {/* ホバー時のオーバーレイ（黒背景＋情報） */}
           {isHovered && (
@@ -298,9 +298,9 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
               }}
             >
               {/* タイトルとアーティスト名 */}
-              <div style={{ 
-                textAlign: 'center', 
-                color: 'white', 
+              <div style={{
+                textAlign: 'center',
+                color: 'white',
                 textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
                 lineHeight: '1.3',
                 marginTop: 'auto',
@@ -341,9 +341,9 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                   }}
                   onClick={e => {
                     if (!showFullText && isTitleEllipsis) setShowFullText(true);
-                    }}
-                  >
-                    {card.title || "（タイトルなし）"}
+                  }}
+                >
+                  {card.title || "（タイトルなし）"}
                 </div>
                 {card.artist && (
                   <div
@@ -377,20 +377,20 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                     }}
                   >
                     {card.artist}
-              </div>
-                )}
                   </div>
+                )}
+              </div>
               {/* ボタン群 */}
               {!showFullText && (
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'center', 
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
                   gap: '12px',
                   marginTop: '16px'
                 }}>
                   {/* 再生ボタン */}
                   <button
-                  style={{
+                    style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '50%',
@@ -484,6 +484,7 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
+                      if (!checkLoginRequired()) return;
                       setLabelMenuCardId(card.id);
                     }}
                     onMouseEnter={(e) => {
@@ -497,10 +498,10 @@ function SortableCard({ card, visibleMemos, toggleMemo, handleMemoChange, handle
                   </button>
                 </div>
               )}
-              </div>
+            </div>
           )}
-          </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }
@@ -545,7 +546,7 @@ function SortableLabel({ label, filterLabelId, setFilterLabelId, handleDeleteLab
         style={{
           marginLeft: 8,
           fontWeight: "normal",
-          color: isSelected ? (darkMode ? "#222" : "#fff") : (darkMode ? "#fff" : "#333"),
+          color: darkMode ? "#fff" : "#000",
           fontSize: "1.1em",
           cursor: "pointer",
           background: "none",
@@ -613,12 +614,16 @@ function App() {
   const fileInputRef = useRef();
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showAccountRipple, setShowAccountRipple] = useState(false);
+  const [loginRequiredMessage, setLoginRequiredMessage] = useState('');
+  const accountMenuRef = useRef();
 
   // Firebase認証状態の監視
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
-      
+
       if (user) {
         // ユーザーがログインした場合、Firestoreからデータを読み込み
         console.log('ユーザーログイン:', user.email);
@@ -666,7 +671,7 @@ function App() {
         setSelectedHtml(null);
         nextId = 1;
       }
-      
+
       setLoading(false);
     });
     return () => unsubscribe();
@@ -686,6 +691,23 @@ function App() {
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // アカウントメニュー外クリックで閉じる
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
+        setShowAccountMenu(false);
+      }
+    };
+
+    if (showAccountMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showAccountMenu]);
 
   // ログアウト処理
   const handleLogout = async () => {
@@ -710,12 +732,12 @@ function App() {
   // カードドラッグ終了ハンドラー
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    
+
     if (active && over && active.id !== over.id) {
       setCards((prevCards) => {
         const oldIndex = prevCards.findIndex((card) => card.id === active.id);
         const newIndex = prevCards.findIndex((card) => card.id === over.id);
-        
+
         if (oldIndex !== -1 && newIndex !== -1) {
           return arrayMove(prevCards, oldIndex, newIndex);
         }
@@ -743,7 +765,7 @@ function App() {
   // ユーザーデータをFirestoreに保存する関数
   const saveUserDataToFirestore = async (data) => {
     if (!user) return;
-    
+
     try {
       const userData = {
         cards: data.cards || cards,
@@ -756,7 +778,7 @@ function App() {
         profileIcon: data.profileIcon || profileIcon,
         lastUpdated: new Date().toISOString()
       };
-      
+
       await saveUserData(user.uid, userData);
       console.log('ユーザーデータをFirestoreに保存しました');
     } catch (error) {
@@ -771,7 +793,7 @@ function App() {
   // カードデータが変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ cards });
     }, 500);
@@ -781,7 +803,7 @@ function App() {
   // ラベルデータが変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ labels });
     }, 500);
@@ -791,7 +813,7 @@ function App() {
   // プロフィールテキストが変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ profileText });
     }, 500);
@@ -801,7 +823,7 @@ function App() {
   // ニックネームが変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ nickname });
       localStorage.setItem("my-music-nickname", nickname);
@@ -812,7 +834,7 @@ function App() {
   // プロフィールアイコンが変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ profileIcon });
       localStorage.setItem("my-music-profile-icon", profileIcon);
@@ -829,13 +851,13 @@ function App() {
         alert('ファイルサイズは5MB以下にしてください');
         return;
       }
-      
+
       // 画像ファイルのみ許可
       if (!file.type.startsWith('image/')) {
         alert('画像ファイルを選択してください');
         return;
       }
-      
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setProfileIcon(e.target.result);
@@ -864,7 +886,7 @@ function App() {
       // Firebase認証でパスワードを確認
       const { signInWithEmailAndPassword } = await import('firebase/auth');
       await signInWithEmailAndPassword(auth, user.email, passwordInput);
-      
+
       // 認証成功
       setShowFullEmail(true);
       setShowPasswordPrompt(false);
@@ -878,7 +900,7 @@ function App() {
   // 設定が変更されたときにFirestoreに保存
   useEffect(() => {
     if (!user) return;
-    
+
     const timeout = setTimeout(() => {
       saveUserDataToFirestore({ listView, darkMode });
     }, 500);
@@ -897,7 +919,7 @@ function App() {
       const div = document.createElement("div");
       div.innerHTML = html;
       const iframe = div.firstChild;
-      
+
       if (iframe && iframe.tagName === 'IFRAME') {
         // title属性から抽出を試みる
         const title = iframe.getAttribute('title');
@@ -917,7 +939,7 @@ function App() {
             }
           }
         }
-        
+
         // src属性からトラックIDを取得
         const src = iframe.getAttribute('src');
         console.log("iframe src:", src);
@@ -961,7 +983,7 @@ function App() {
       const response = await axios.get(embedUrl);
       const html = response.data;
       console.log("HTML取得完了、サイズ:", html.length);
-      
+
       // __NEXT_DATA__スクリプトタグからJSONデータを抽出
       const nextDataMatch = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/s);
       if (nextDataMatch) {
@@ -1024,24 +1046,24 @@ function App() {
         console.log("oEmbed APIを呼び出し中...");
         const url = `https://open.spotify.com/oembed?url=${encodeURIComponent(normalizedUrl)}`;
         console.log("API URL:", url);
-        
+
         const res = await axios.get(url);
         console.log("oEmbed API呼び出し成功");
         console.log("Spotify oEmbed response:", res.data); // デバッグ用
-        
+
         // titleに「曲名 · アーティスト名」形式が含まれている場合
         let title = res.data.title;
         let artist = "";
         let album = "";
-        
+
         // タイトルがURLそのものの場合は「（タイトルなし）」に
         if (!title || title === input) {
           title = "（タイトルなし）";
         }
-        
+
         console.log("取得したtitle:", title);
         console.log("author_name:", res.data.author_name);
-        
+
         if (title.includes("·")) {
           const parts = title.split("·");
           title = parts[0].trim();
@@ -1212,8 +1234,24 @@ function App() {
     }));
   };
 
+  // ログイン必須機能チェック
+  const checkLoginRequired = () => {
+    if (!user) {
+      setLoginRequiredMessage('この機能を使うには右上からログインしてください');
+      setShowAccountRipple(true);
+      setTimeout(() => setLoginRequiredMessage(''), 3000);
+      setTimeout(() => setShowAccountRipple(false), 3000);
+      // 2回目の波紋エフェクト
+      setTimeout(() => setShowAccountRipple(true), 800);
+      setTimeout(() => setShowAccountRipple(false), 3800);
+      return false;
+    }
+    return true;
+  };
+
   // ラベル追加
   const handleAddLabel = () => {
+    if (!checkLoginRequired()) return;
     setAddLabelEmoji('⭐');
     setAddLabelName('');
     setLabelNameError('');
@@ -1232,7 +1270,7 @@ function App() {
       clearTimeout(enterTimeoutRef.current);
     }
   };
-  
+
   // タグ名入力制御
   const handleLabelNameChange = (e) => {
     const value = e.target.value;
@@ -1270,10 +1308,10 @@ function App() {
   // ローディング中は何も表示しない
   if (loading) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         height: "100vh",
         background: darkMode ? "#000" : "#fff",
         color: darkMode ? "#fff" : "#000"
@@ -1283,16 +1321,14 @@ function App() {
     );
   }
 
-  // ユーザーが未認証の場合はログイン画面を表示
-  if (!user) {
-    return <Auth onAuthStateChange={(user) => setUser(user)} />;
-  }
+  // 未認証でもメイン画面を表示（機能制限あり）
+  // ログイン・サインアップはアカウントメニューから行う
 
   return (
     <div className={`app ${darkMode ? "dark" : ""}`} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", width: "100vw", maxWidth: "100vw", margin: 0, padding: listView ? 0 : 20, boxSizing: "border-box" }}>
       {/* アカウントメニュー */}
-      {!loading && user && (
-        <div style={{ position: "fixed", top: 6, right: 6, zIndex: 2000 }}>
+      {!loading && (
+        <div ref={accountMenuRef} style={{ position: "fixed", top: 6, right: 6, zIndex: 2000 }}>
           <div style={{ position: "relative" }}>
             <button
               onClick={() => setShowAccountMenu(!showAccountMenu)}
@@ -1309,14 +1345,15 @@ function App() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                overflow: "hidden",
-                padding: 0
+                overflow: "visible",
+                padding: 0,
+                position: "relative"
               }}
             >
               {profileIcon ? (
-                <img 
-                  src={profileIcon} 
-                  alt="Profile" 
+                <img
+                  src={profileIcon}
+                  alt="Profile"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -1330,10 +1367,28 @@ function App() {
                 />
               ) : null}
               <span style={{ display: profileIcon ? "none" : "block" }}>
-                {nickname ? nickname.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                {user ? (nickname ? nickname.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()) : "?"}
               </span>
+              {/* 波紋エフェクト */}
+              {showAccountRipple && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: "30px",
+                    height: "30px",
+                    transform: "translate(-50%, -50%)",
+                    borderRadius: "50%",
+                    background: "transparent",
+                    border: "2px solid #00ff88",
+                    animation: "ripple 3s ease-out",
+                    pointerEvents: "none"
+                  }}
+                />
+              )}
             </button>
-            
+
             {showAccountMenu && (
               <div
                 style={{
@@ -1341,182 +1396,199 @@ function App() {
                   top: 50,
                   right: 0,
                   background: darkMode ? "#000" : "#fff",
-                  border: darkMode ? "1px solid #fff" : "1px solid #222",
-                  borderRadius: 8,
-                  padding: 16,
-                  minWidth: 200,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  border: darkMode ? "1px solid #fff" : "1px solid #ddd",
+                  borderRadius: 12,
+                  padding: 20,
+                  minWidth: 220,
+                  boxShadow: darkMode ? "0 8px 32px rgba(255,255,255,0.1)" : "0 8px 32px rgba(0,0,0,0.12)",
                   zIndex: 2001,
                 }}
               >
-                {/* アカウントアイコン表示 */}
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-                  <div
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: "50%",
-                      background: profileIcon ? "transparent" : (darkMode ? "#333" : "#f5f5f5"),
-                      border: darkMode ? "2px solid #fff" : "2px solid #222",
-                      color: darkMode ? "#fff" : "#222",
-                      fontSize: "1.8rem",
-                      fontWeight: "bold",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      overflow: "hidden",
-                      padding: 0
-                    }}
-                  >
-                    {profileIcon ? (
-                      <img 
-                        src={profileIcon} 
-                        alt="Profile" 
+                {!user ? (
+                  // 未認証時：ログイン・サインアップボタン
+                  <div>
+                    <Auth
+                      isDropdownMode={true}
+                      darkMode={darkMode}
+                      onAuthStateChange={(user) => {
+                        setUser(user);
+                        setShowAccountMenu(false);
+                      }}
+                    />
+                  </div>
+                ) : (
+                  // ログイン済み時：既存のメニュー
+                  <>
+                    {/* アカウントアイコン表示 */}
+                    <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+                      <div
+                        style={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: "50%",
+                          background: profileIcon ? "transparent" : (darkMode ? "#333" : "#f5f5f5"),
+                          border: darkMode ? "2px solid #fff" : "2px solid #222",
+                          color: darkMode ? "#fff" : "#222",
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
+                          padding: 0
+                        }}
+                      >
+                        {profileIcon ? (
+                          <img
+                            src={profileIcon}
+                            alt="Profile"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "50%"
+                            }}
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                              e.target.nextSibling.style.display = "block";
+                            }}
+                          />
+                        ) : null}
+                        <span style={{ display: profileIcon ? "none" : "block" }}>
+                          {nickname ? nickname.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
+                        ニックネーム
+                      </div>
+                      <input
+                        type="text"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        placeholder="ニックネームを入力"
                         style={{
                           width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "50%"
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "block";
+                          padding: "6px 8px",
+                          borderRadius: 4,
+                          border: darkMode ? "1px solid #666" : "1px solid #ccc",
+                          background: darkMode ? "#333" : "#fff",
+                          color: darkMode ? "#fff" : "#222",
+                          fontSize: "0.9rem",
+                          boxSizing: "border-box"
                         }}
                       />
-                    ) : null}
-                    <span style={{ display: profileIcon ? "none" : "block" }}>
-                      {nickname ? nickname.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-                
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
-                    ニックネーム
-                  </div>
-                  <input
-                    type="text"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
-                    placeholder="ニックネームを入力"
-                    style={{
-                      width: "100%",
-                      padding: "6px 8px",
-                      borderRadius: 4,
-                      border: darkMode ? "1px solid #666" : "1px solid #ccc",
-                      background: darkMode ? "#333" : "#fff",
-                      color: darkMode ? "#fff" : "#222",
-                      fontSize: "0.9rem",
-                      boxSizing: "border-box"
-                    }}
-                  />
-                </div>
-                
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
-                    プロフィール画像
-                  </div>
-                  
-                  {/* ファイル選択ボタン */}
-                  <div style={{ marginBottom: 8 }}>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileSelect}
-                      style={{ display: "none" }}
-                    />
+                    </div>
+
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
+                        プロフィール画像
+                      </div>
+
+                      {/* ファイル選択ボタン */}
+                      <div style={{ marginBottom: 8 }}>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileSelect}
+                          style={{ display: "none" }}
+                        />
+                        <button
+                          onClick={() => fileInputRef.current?.click()}
+                          style={{
+                            padding: "8px 16px",
+                            borderRadius: 6,
+                            border: darkMode ? "1px solid #666" : "1px solid #ccc",
+                            background: darkMode ? "#444" : "#f5f5f5",
+                            color: darkMode ? "#fff" : "#222",
+                            cursor: "pointer",
+                            fontSize: "0.9rem",
+                            width: "100%"
+                          }}
+                        >
+                          📁 ファイルを選択
+                        </button>
+                      </div>
+
+                      {/* URL入力（オプション） */}
+                      <div style={{ fontSize: "0.8rem", color: darkMode ? "#aaa" : "#888", marginBottom: 4 }}>
+                        または画像URLを入力:
+                      </div>
+                      <input
+                        type="text"
+                        value={profileIcon.startsWith('data:') ? '' : profileIcon}
+                        onChange={(e) => setProfileIcon(e.target.value)}
+                        placeholder="https://example.com/image.jpg"
+                        style={{
+                          width: "100%",
+                          padding: "6px 8px",
+                          borderRadius: 4,
+                          border: darkMode ? "1px solid #666" : "1px solid #ccc",
+                          background: darkMode ? "#333" : "#fff",
+                          color: darkMode ? "#fff" : "#222",
+                          fontSize: "0.9rem",
+                          boxSizing: "border-box"
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
+                        メールアドレス
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: "0.95rem", color: darkMode ? "#fff" : "#222" }}>
+                          {showFullEmail ? user.email : `${user.email.substring(0, 3)}***@${user.email.split('@')[1]}`}
+                        </span>
+                        <button
+                          onClick={handleShowEmail}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            fontSize: "1rem",
+                            color: darkMode ? "#ccc" : "#666",
+                          }}
+                        >
+                          👁
+                        </button>
+                      </div>
+                    </div>
                     <button
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={handleLogout}
+                      className="delete-all-btn logout-btn"
                       style={{
-                        padding: "8px 16px",
-                        borderRadius: 6,
-                        border: darkMode ? "1px solid #666" : "1px solid #ccc",
-                        background: darkMode ? "#444" : "#f5f5f5",
-                        color: darkMode ? "#fff" : "#222",
-                        cursor: "pointer",
-                        fontSize: "0.9rem",
-                        width: "100%"
-                      }}
-                    >
-                      📁 ファイルを選択
-                    </button>
-                  </div>
-                  
-                  {/* URL入力（オプション） */}
-                  <div style={{ fontSize: "0.8rem", color: darkMode ? "#aaa" : "#888", marginBottom: 4 }}>
-                    または画像URLを入力:
-                  </div>
-                  <input
-                    type="text"
-                    value={profileIcon.startsWith('data:') ? '' : profileIcon}
-                    onChange={(e) => setProfileIcon(e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                    style={{
-                      width: "100%",
-                      padding: "6px 8px",
-                      borderRadius: 4,
-                      border: darkMode ? "1px solid #666" : "1px solid #ccc",
-                      background: darkMode ? "#333" : "#fff",
-                      color: darkMode ? "#fff" : "#222",
-                      fontSize: "0.9rem",
-                      boxSizing: "border-box"
-                    }}
-                  />
-                </div>
-                
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: "0.9rem", color: darkMode ? "#ccc" : "#666", marginBottom: 4 }}>
-                    メールアドレス
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: "0.95rem", color: darkMode ? "#fff" : "#222" }}>
-                      {showFullEmail ? user.email : `${user.email.substring(0, 3)}***@${user.email.split('@')[1]}`}
-                    </span>
-                    <button
-                      onClick={handleShowEmail}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
+                        width: "100%",
+                        height: "2.2rem",
+                        lineHeight: "2.2rem",
                         fontSize: "1rem",
-                        color: darkMode ? "#ccc" : "#666",
+                        borderRadius: "9999px",
+                        minWidth: "75px",
+                        padding: "0 18px",
+                        borderWidth: "1.7px",
+                        borderStyle: "solid",
+                        borderColor: darkMode ? "#fff" : "#222",
+                        cursor: "pointer",
+                        background: darkMode ? "#111" : "#fff",
+                        color: darkMode ? "#fff" : "#222",
+                        fontWeight: "900",
+                        letterSpacing: "0.02em",
+                        transition: "background-color 0.2s, color 0.2s, border 0.2s",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxSizing: "border-box",
+                        whiteSpace: "nowrap",
+                        fontFamily: "'Mochiy Pop P One', sans-serif",
                       }}
                     >
-                      👁
+                      ログアウト
                     </button>
-                  </div>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="delete-all-btn logout-btn"
-                  style={{
-                    width: "100%",
-                    height: "2.2rem",
-                    lineHeight: "2.2rem",
-                    fontSize: "1rem",
-                    borderRadius: "9999px",
-                    minWidth: "75px",
-                    padding: "0 18px",
-                    borderWidth: "1.7px",
-                    borderStyle: "solid",
-                    borderColor: darkMode ? "#fff" : "#222",
-                    cursor: "pointer",
-                    background: darkMode ? "#111" : "#fff",
-                    color: darkMode ? "#fff" : "#222",
-                    fontWeight: "900",
-                    letterSpacing: "0.02em",
-                    transition: "background-color 0.2s, color 0.2s, border 0.2s",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxSizing: "border-box",
-                    whiteSpace: "nowrap",
-                    fontFamily: "'Mochiy Pop P One', sans-serif",
-                  }}
-                >
-                  ログアウト
-                </button>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -1525,17 +1597,17 @@ function App() {
 
       {/* パスワード確認モーダル */}
       {showPasswordPrompt && (
-        <div 
-          className="modal-overlay" 
+        <div
+          className="modal-overlay"
           style={{ zIndex: 2500 }}
           onClick={() => {
             setShowPasswordPrompt(false);
             setPasswordInput('');
           }}
         >
-          <div 
-            className="modal-content" 
-            style={{ 
+          <div
+            className="modal-content"
+            style={{
               background: darkMode ? "#000" : "#fff",
               color: darkMode ? "#fff" : "#000",
               border: darkMode ? "1px solid #fff" : "1px solid #222",
@@ -1617,10 +1689,10 @@ function App() {
             <form onSubmit={handleAdd} className="form" style={{ marginBottom: 0, justifyContent: 'flex-start', gap: 0, width: '100%', flexDirection: window.innerWidth <= 700 ? 'column' : 'row', alignItems: 'flex-start' }}>
               <div className="search-container" style={{ marginLeft: 0 }}>
                 <FiSearch className="search-icon" />
-                <input 
-                  type="text" 
-                  placeholder="Spotifyの共有リンクを貼ってね 🎵" 
-                  value={input} 
+                <input
+                  type="text"
+                  placeholder="Spotifyの共有リンクを貼ってね 🎵"
+                  value={input}
                   onChange={(e) => setInput(e.target.value)}
                 />
               </div>
@@ -1634,13 +1706,13 @@ function App() {
                       onClick={() => setShowDeleteConfirm(true)}
                     >全カード削除</button>
                   )}
-                  <button 
-                    onClick={() => setShowAllLabelMenu(true)}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: 36, 
-                      minWidth: 80, 
-                      borderRadius: 8, 
+                  <button
+                    onClick={() => { if (!checkLoginRequired()) return; setShowAllLabelMenu(true); }}
+                    style={{
+                      flexShrink: 0,
+                      height: 36,
+                      minWidth: 80,
+                      borderRadius: 8,
                       border: darkMode ? '1px solid #fff' : '1px solid #222',
                       background: darkMode ? '#111' : '#fff',
                       color: darkMode ? '#fff' : '#222',
@@ -1679,9 +1751,9 @@ function App() {
           </div>
           {/* 950px以下700px以上の時にタグリストを表示 */}
           {window.innerWidth > 700 && (
-            <DndContext 
-              sensors={sensors} 
-              collisionDetection={closestCenter} 
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
               onDragEnd={handleLabelDragEnd}
               modifiers={[restrictToHorizontalAxis]}
             >
@@ -1697,9 +1769,10 @@ function App() {
                       darkMode={darkMode}
                     />
                   ))}
-                  <button 
+                  <button
                     className="tag-create-btn"
                     onClick={() => {
+                      if (!checkLoginRequired()) return;
                       if (labels.length >= 5) {
                         setShowMaxLabelMsg(true);
                         return;
@@ -1710,11 +1783,11 @@ function App() {
                       setShowAddLabelModal(true);
                       setShowMaxLabelMsg(true);
                     }}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: 36, 
-                      minWidth: 80, 
-                      borderRadius: 8, 
+                    style={{
+                      flexShrink: 0,
+                      height: 36,
+                      minWidth: 80,
+                      borderRadius: 8,
                       border: darkMode ? '1px solid #fff' : '1px solid #222',
                       background: darkMode ? '#111' : '#fff',
                       fontSize: '1em',
@@ -1748,10 +1821,10 @@ function App() {
             <form onSubmit={handleAdd} className="form" style={{ marginBottom: 0, justifyContent: 'flex-start', gap: 0, width: '100%', flexDirection: window.innerWidth <= 700 ? 'column' : 'row', alignItems: 'flex-start', marginTop: '2px' }}>
               <div className="search-container" style={{ marginLeft: 0 }}>
                 <FiSearch className="search-icon" />
-                <input 
-                  type="text" 
-                  placeholder="Spotifyの共有リンクを貼ってね 🎵" 
-                  value={input} 
+                <input
+                  type="text"
+                  placeholder="Spotifyの共有リンクを貼ってね 🎵"
+                  value={input}
                   onChange={(e) => setInput(e.target.value)}
                 />
               </div>
@@ -1765,13 +1838,13 @@ function App() {
                       onClick={() => setShowDeleteConfirm(true)}
                     >全カード削除</button>
                   )}
-                  <button 
-                    onClick={() => setShowAllLabelMenu(true)}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: 36, 
-                      minWidth: 80, 
-                      borderRadius: 8, 
+                  <button
+                    onClick={() => { if (!checkLoginRequired()) return; setShowAllLabelMenu(true); }}
+                    style={{
+                      flexShrink: 0,
+                      height: 36,
+                      minWidth: 80,
+                      borderRadius: 8,
                       border: darkMode ? '1px solid #fff' : '1px solid #222',
                       background: darkMode ? '#111' : '#fff',
                       color: darkMode ? '#fff' : '#222',
@@ -1810,9 +1883,9 @@ function App() {
           </div>
           <hr className="main-header-hr" />
           {/* タグ管理UI（独立した行） */}
-          <DndContext 
-            sensors={sensors} 
-            collisionDetection={closestCenter} 
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
             onDragEnd={handleLabelDragEnd}
             modifiers={[restrictToHorizontalAxis]}
           >
@@ -1829,9 +1902,10 @@ function App() {
                   />
                 ))}
                 {!is965 && (
-                  <button 
+                  <button
                     className="tag-create-btn"
                     onClick={() => {
+                      if (!checkLoginRequired()) return;
                       if (labels.length >= 5) {
                         setShowMaxLabelMsg(true);
                         return;
@@ -1842,11 +1916,11 @@ function App() {
                       setShowAddLabelModal(true);
                       setShowMaxLabelMsg(true);
                     }}
-                    style={{ 
-                      flexShrink: 0, 
-                      height: 36, 
-                      minWidth: 80, 
-                      borderRadius: 8, 
+                    style={{
+                      flexShrink: 0,
+                      height: 36,
+                      minWidth: 80,
+                      borderRadius: 8,
                       border: darkMode ? '1px solid #fff' : '1px solid #222',
                       background: darkMode ? '#111' : '#fff',
                       fontSize: '1em',
@@ -1968,7 +2042,7 @@ function App() {
                       style={centerModalHoveredBtn === 'flag' ? { ...btnBaseStyle, ...btnHoverStyle } : btnBaseStyle}
                       onMouseEnter={() => setCenterModalHoveredBtn('flag')}
                       onMouseLeave={() => setCenterModalHoveredBtn(null)}
-                      onClick={() => { setCenterModalCardId(null); setLabelMenuCardId(card.id); }}
+                      onClick={() => { setCenterModalCardId(null); if (!checkLoginRequired()) return; setLabelMenuCardId(card.id); }}
                     ><i className="bi bi-flag"></i></button>
                   </div>
                 </>
@@ -1978,10 +2052,30 @@ function App() {
         </div>
       )}
 
+      {/* ログイン必須メッセージ */}
+      {loginRequiredMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 3000,
+          background: '#ff4444',
+          color: '#fff',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          fontWeight: 'bold',
+          fontSize: '1.1em',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        }}>
+          {loginRequiredMessage}
+        </div>
+      )}
+
       <div style={{ flex: 1 }}>
-        <DndContext 
-          sensors={sensors} 
-          collisionDetection={closestCenter} 
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={filteredCards.map((card) => card.id)} strategy={rectSortingStrategy}>
@@ -1989,19 +2083,19 @@ function App() {
               {listView ? (
                 filteredCards.map((card, idx) => (
                   <React.Fragment key={card.id}>
-                <SortableCard
-                  key={card.id}
-                  card={card}
-                  visibleMemos={visibleMemos}
-                  toggleMemo={toggleMemo}
-                  handleMemoChange={handleMemoChange}
-                  handlePlay={handlePlay}
-                  handleDelete={handleDelete}
-                  listView={listView}
-                  labels={labels}
-                  toggleCardLabel={toggleCardLabel}
-                  setLabelMenuCardId={setLabelMenuCardId}
-                  setModalMemoCardId={setModalMemoCardId}
+                    <SortableCard
+                      key={card.id}
+                      card={card}
+                      visibleMemos={visibleMemos}
+                      toggleMemo={toggleMemo}
+                      handleMemoChange={handleMemoChange}
+                      handlePlay={handlePlay}
+                      handleDelete={handleDelete}
+                      listView={listView}
+                      labels={labels}
+                      toggleCardLabel={toggleCardLabel}
+                      setLabelMenuCardId={setLabelMenuCardId}
+                      setModalMemoCardId={setModalMemoCardId}
                       setFilterLabelId={setFilterLabelId}
                       setShowAlbumCardId={setShowAlbumCardId}
                       showAlbumCardId={showAlbumCardId}
@@ -2011,6 +2105,7 @@ function App() {
                       is769={is769}
                       is700={is700}
                       setCenterModalCardId={setCenterModalCardId}
+                      checkLoginRequired={checkLoginRequired}
                     />
                   </React.Fragment>
                 ))
@@ -2038,6 +2133,7 @@ function App() {
                     is769={is769}
                     is700={is700}
                     setCenterModalCardId={setCenterModalCardId}
+                    checkLoginRequired={checkLoginRequired}
                   />
                 ))
               )}
@@ -2138,9 +2234,9 @@ function App() {
         {/* ラベル追加モーダル */}
         {showAddLabelModal && (
           <div className="modal-overlay" style={{ zIndex: 4000 }} onClick={() => setShowAddLabelModal(false)}>
-            <div className="modal-content" style={{ 
-              minWidth: 320, 
-              maxWidth: 360, 
+            <div className="modal-content" style={{
+              minWidth: 320,
+              maxWidth: 360,
               zIndex: 4001,
               background: darkMode ? "#000" : "#fff",
               border: darkMode ? "1px solid #fff" : "none",
@@ -2187,12 +2283,12 @@ function App() {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         setEnterPressCount(prev => prev + 1);
-                        
+
                         // 既存のタイムアウトをクリア
                         if (enterTimeoutRef.current) {
                           clearTimeout(enterTimeoutRef.current);
                         }
-                        
+
                         // 2回目のEnterの場合はタグを追加
                         if (enterPressCount === 1) {
                           handleAddLabelSubmit();
@@ -2205,11 +2301,11 @@ function App() {
                         }
                       }
                     }}
-                    style={{ 
-                      flex: 1, 
-                      fontSize: '1.1em', 
+                    style={{
+                      flex: 1,
+                      fontSize: '1.1em',
                       padding: 8,
-                      borderRadius: 8, 
+                      borderRadius: 8,
                       border: labelNameError ? (darkMode ? '1px solid #ff6666' : '1px solid #ff4444') : (darkMode ? '1px solid #fff' : '1px solid #ccc'),
                       background: darkMode ? '#111' : '#fff',
                       color: darkMode ? '#fff' : '#000'
@@ -2224,31 +2320,31 @@ function App() {
                 )}
                 <div style={{ display: 'flex', gap: 12, width: '80%', marginTop: labelNameError ? 0 : 8 }}>
                   <button
-                    style={{ 
-                      flex: 1, 
-                      padding: '6px 24px', 
-                      borderRadius: 8, 
-                      border: darkMode ? '1px solid #fff' : '1.5px solid #ccc', 
-                      background: darkMode ? '#000' : '#fafafa', 
-                      cursor: 'pointer', 
-                      fontWeight: 'bold', 
-                      fontSize: '1em', 
-                      color: darkMode ? '#fff' : '#444' 
+                    style={{
+                      flex: 1,
+                      padding: '6px 24px',
+                      borderRadius: 8,
+                      border: darkMode ? '1px solid #fff' : '1.5px solid #ccc',
+                      background: darkMode ? '#000' : '#fafafa',
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                      fontSize: '1em',
+                      color: darkMode ? '#fff' : '#444'
                     }}
                     onClick={handleAddLabelSubmit}
                     disabled={!addLabelName.trim() || !addLabelEmoji}
                   >追加</button>
                   <button
-                    style={{ 
-                      flex: 1, 
-                      padding: '6px 24px', 
-                      borderRadius: 8, 
-                      border: darkMode ? '1px solid #fff' : '1.5px solid #ccc', 
-                      background: darkMode ? '#000' : '#fafafa', 
-                      cursor: 'pointer', 
-                      fontWeight: 'bold', 
-                      fontSize: '1em', 
-                      color: darkMode ? '#fff' : '#444' 
+                    style={{
+                      flex: 1,
+                      padding: '6px 24px',
+                      borderRadius: 8,
+                      border: darkMode ? '1px solid #fff' : '1.5px solid #ccc',
+                      background: darkMode ? '#000' : '#fafafa',
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                      fontSize: '1em',
+                      color: darkMode ? '#fff' : '#444'
                     }}
                     onClick={() => setShowAddLabelModal(false)}
                   >閉じる</button>
@@ -2292,9 +2388,9 @@ function App() {
           {/* iframeを直接append */}
           <div
             ref={el => {
-            if (el && spotifyIframe && !el.firstChild) {
-              el.appendChild(spotifyIframe);
-            }
+              if (el && spotifyIframe && !el.firstChild) {
+                el.appendChild(spotifyIframe);
+              }
             }}
             style={{ width: '100%', height: '100%' }}
           />
@@ -2343,15 +2439,15 @@ function App() {
         </div>
       )}
 
-      {cards.length === 0 && labels.length === 0 && (
-        <div style={{ 
+      {cards.length === 0 && (
+        <div style={{
           position: 'fixed',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           zIndex: 500,
-          color: darkMode ? '#fff' : '#222', 
-          fontSize: window.innerWidth > 900 ? '1.8em' : '1.5em', 
+          color: darkMode ? '#fff' : '#222',
+          fontSize: window.innerWidth > 900 ? '1.8em' : '1.5em',
           fontWeight: 900,
           fontFamily: "'Mochiy Pop P One', sans-serif",
           letterSpacing: '0.02em',
@@ -2362,10 +2458,22 @@ function App() {
           textAlign: 'center',
           maxWidth: window.innerWidth > 900 ? 'none' : '80vw'
         }}>
-          <div style={{ whiteSpace: window.innerWidth > 900 ? 'nowrap' : 'normal' }}>まずは楽曲の共有リンクをコピーして貼り付けて楽曲を追加してみよう🎶</div>
-          <div style={{ 
-            width: '400px', 
-            height: '300px', 
+          {!user && (
+            <div style={{
+              fontSize: window.innerWidth <= 768 ? '0.75em' : '0.8em',
+              marginBottom: window.innerWidth <= 768 ? '4px' : '8px',
+              lineHeight: '1.4'
+            }}>
+              まずは右上のアカウントメニューからアカウントを作成しましょう
+            </div>
+          )}
+          <div style={{
+            whiteSpace: window.innerWidth > 900 ? 'nowrap' : 'normal',
+            lineHeight: window.innerWidth <= 768 ? '1.3' : '1.2'
+          }}>まずは楽曲の共有リンクをコピーして貼り付けて楽曲を追加してみよう🎶</div>
+          <div style={{
+            width: '400px',
+            height: '300px',
             background: `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
                 <rect width="400" height="300" fill="#1a1a1a" rx="8"/>

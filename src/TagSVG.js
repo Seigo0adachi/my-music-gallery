@@ -1,8 +1,18 @@
 import React from 'react';
 
-export default function TagSVG({ emoji, text, onDelete, style = {}, darkMode, selected }) {
+export default function TagSVG({ emoji, text, onDelete, style = {}, darkMode, selected, hovered }) {
   const width = 125;
   const height = 32;
+  
+  // 背景色を動的に決定
+  const getBackgroundColor = () => {
+    if (hovered || selected) {
+      // ホバー時と選択中は白に近いグレー
+      return darkMode ? "#444" : "#e8e8e8";
+    }
+    return selected ? "#fff" : "#000";
+  };
+  
   return (
     <svg
       width={width}
@@ -18,10 +28,10 @@ export default function TagSVG({ emoji, text, onDelete, style = {}, darkMode, se
         strokeWidth="4"
         strokeLinejoin="round"
       />
-      {/* 矢印本体（選択中は白、通常は黒）を少し大きめに */}
+      {/* 矢印本体（ホバー・選択時は白に近いグレー、それ以外は従来通り） */}
       <polygon
         points="3,16 23,1 122,1 122,31 23,31"
-        fill={selected ? "#fff" : "#000"}
+        fill={getBackgroundColor()}
         stroke="none"
       />
       {/* 絵文字の丸（選択中は黒、通常は白） */}
@@ -34,12 +44,12 @@ export default function TagSVG({ emoji, text, onDelete, style = {}, darkMode, se
       <text x="46" y="18" fontSize="15" fill={selected ? "#000" : "#fff"} fontWeight="bold" dominantBaseline="middle">
         {text}
       </text>
-      {/* ×ボタン（色も切り替えた方が良ければここも） */}
+      {/* ×ボタン（ライトモードでは常に黒、ダークモードでは白） */}
       <text
         x={width - 24}
         y="20"
         fontSize="16"
-        fill={selected ? "#000" : "#fff"}
+        fill={darkMode ? "#fff" : "#000"}
         fontWeight="bold"
         style={{ cursor: 'pointer', userSelect: 'none' }}
         onClick={onDelete}

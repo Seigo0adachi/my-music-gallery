@@ -1441,9 +1441,14 @@ span[style*="background: #f5f5f5"] > span:last-child {
   margin-right: 4px;
 }
 
-.music-label-btn.selected,
+.music-label-btn.selected {
+  background: #f0f0f0;
+  color: #333;
+  border: 2px solid #000;
+}
+
 .music-label-btn:hover {
-  background: #e0e0e0;
+  background: #f0f0f0;
   color: #333;
 }
 
@@ -1463,6 +1468,7 @@ span[style*="background: #f5f5f5"] > span:last-child {
 .dark .music-label-btn.selected {
   background: #fff !important;
   color: #222 !important;
+  border: 2px solid #fff !important;
 }
 
 .dark .music-label-btn.selected .tag-emoji {
@@ -1470,7 +1476,7 @@ span[style*="background: #f5f5f5"] > span:last-child {
 }
 
 .dark .music-label-btn:hover {
-  background-color: #444;
+  background-color: #555;
   color: #fff;
 }
 
